@@ -4,6 +4,8 @@
 
 [Mac](https://downloads2.mamp.info/MAMP-PRO/releases/4.4.1/MAMP_MAMP_PRO_4.4.1.pkg)
 
+[MAMP Included Components](instructions/included.md)
+
 ## Importing the Database:
 
 [Instructions](instructions/sql.md)
