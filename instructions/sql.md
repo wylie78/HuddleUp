@@ -2,7 +2,7 @@
 
 1. Install MAMP
 2. Click "Start servers"
-  * Wait for the two boxes in the upper right to go green
+  1. Wait for the two boxes in the upper right to go green
 3. Click on "Open start page"
 4. Under the "Tools" tab, click on the link to "phpMyAdmin"
 5. Click on the "Import" tab
