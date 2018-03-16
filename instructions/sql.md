@@ -1,8 +1,8 @@
-How to import an SQL database into MAMP
+#How to import an SQL database into MAMP
 
 1. Install MAMP
 2. Click "Start servers"
-	a. Wait for the two boxes in the upper right to go green
+  * Wait for the two boxes in the upper right to go green
 3. Click on "Open start page"
 4. Under the "Tools" tab, click on the link to "phpMyAdmin"
 5. Click on the "Import" tab

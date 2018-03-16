@@ -6,4 +6,4 @@
 
 ## Importing the Database:
 
-[I'm a relative reference to a repository file](instructions/sql.md)
+[Instructions](instructions/sql.md)
