@@ -1,4 +1,4 @@
-#Packages Included With MAMP
+# Packages Included With MAMP
 
 * Apache: 2.2.31
 * Nginx 1.13.1
