@@ -1,11 +1,14 @@
 # HuddleUp
-## MAMP Downloads:
-[Windows](https://downloads5.mamp.info/MAMP-PRO-WINDOWS/releases/4.0/MAMP_MAMP_PRO_4.0.exe)
+## Setup:
+http://flask.pocoo.org/docs/0.12/installation/
+Install python - any version after 2.7 would be good. Then install `pip` which we will use for Python package management.
 
-[Mac](https://downloads2.mamp.info/MAMP-PRO/releases/4.4.1/MAMP_MAMP_PRO_4.4.1.pkg)
+Run the following commands:
+1) Install Flask `pip install Flask`
+2) Install SQLAlchemy `pip install SQLAlchemy`
 
-[MAMP Included Components](instructions/included.md)
-
-## Importing the Database:
-
-[Instructions](instructions/sql.md)
+## Run:
+Run the following commands in the project root directory:
+1) `export FLASK_APP=huddleup.py`
+2) `flask initdb` (Note: this command initializes the database and only needs to be run if the database has not yet been initialized)
+3) `flask run`
