@@ -1,11 +1,12 @@
 # HuddleUp
 ## Setup:
-http://flask.pocoo.org/docs/0.12/installation/
 Install python - any version after 2.7 would be good. Then install `pip` which we will use for Python package management.
 
 Run the following commands:
 1) Install Flask `pip install Flask`
 2) Install SQLAlchemy `pip install SQLAlchemy`
+
+More info: http://flask.pocoo.org/docs/0.12/installation/
 
 ## Run:
 Run the following commands in the project root directory:
