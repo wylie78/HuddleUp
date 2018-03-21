@@ -1,6 +1,10 @@
 # HuddleUp
 ## Setup:
-Install python - any version after 2.7 would be good. Then install `pip` which we will use for Python package management.
+Install python - any version after 2.7 would be good. 
+1) `brew install python3`
+
+Then install `pip` which we will use for Python package management, run the following command:
+1) `sudo easy_install pip`
 
 Run the following commands:
 1) Install Flask `pip install Flask`
