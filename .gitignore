@@ -1,4 +1,3 @@
 __pycache__/
 huddleup.db
-huddleup.pyc
-model.pyc
+*.pyc
