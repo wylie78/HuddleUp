@@ -9,6 +9,7 @@ Then install `pip` which we will use for Python package management, run the foll
 Run the following commands:
 1) Install Flask `sudo pip install Flask`
 2) Install SQLAlchemy `sudo pip install SQLAlchemy`
+3) Install SQLAlchemy Flask extension `sudo pip install Flask-SQLAlchemy`
 
 More info: http://flask.pocoo.org/docs/0.12/installation/
 
