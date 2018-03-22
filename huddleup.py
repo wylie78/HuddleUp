@@ -35,13 +35,23 @@ def home():
 def signin():
     if request.method == 'GET':
         return render_template('signin.html')
+    elif request.method == 'POST':
+        #TODO: Connect to DB
+        print(request.form['email'])
+        print(request.form['password'])
+        return redirect(url_for('home'))
         
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
         return render_template('signup.html')
     elif request.method == 'POST':
-        print(request.form['inputFirst'])
+        #TODO: Connect to DB
+        print(request.form['firstname'])
+        print(request.form['lastname'])
+        print(request.form['email'])
+        print(request.form['password'])
+        print(request.form['repeatpassword'])
         return redirect(url_for('home'))
     
 @app.route('/create_group', methods=['GET', 'POST'])
