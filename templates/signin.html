@@ -23,7 +23,7 @@
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
       <div class="register">
       	"or "
-      	<a href="./signup.html" id="signup">create an account</a>
+      	<a href="{{ url_for('signup') }}" method="get" id="signup">create an account</a>
       </div>
       <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
     </form>

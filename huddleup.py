@@ -24,9 +24,27 @@ def initdb_command():
 	print('Initialized the database.')
 
 @app.route('/')
+def index():
+    return redirect(url_for('home'))
+
+@app.route('/home', methods=['GET', 'POST'])
 def home():
-	return render_template('index.html')
+    return render_template('index.html')
     
-@app.route('/signin')
-def login():
-    return render_template('signin.html')
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'GET':
+        return render_template('signin.html')
+        
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+    elif request.method == 'POST':
+        print(request.form['inputFirst'])
+        return redirect(url_for('home'))
+    
+@app.route('/create_group', methods=['GET', 'POST'])
+def create_group():
+    if request.method == 'GET':
+        return render_template('register.html')

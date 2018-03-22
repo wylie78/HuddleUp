@@ -15,7 +15,7 @@
   </head>
   
   <body class="text-center">
-    <form class="form-signup">
+    <form class="form-signup" action="{{ url_for('signup') }}"  method="post">
       <h1 class="h3 mb-3 font-weight-normal">Register for HuddleUp</h1>
       <label for="inputFirst" class="sr-only">First Name</label>
       <input type="info" id="inputFirst" class="form-control" placeholder="Fist Name" required autofocus>
@@ -29,7 +29,7 @@
       <input type="lastInfo" id="input2ndPassword" class="form-control" placeholder="Repeat Password" required>
       <div class="signin">
       	"or "
-      	<a href="./signin.html" id="signin">sign in</a>
+      	<a href="{{ url_for('signin') }}" method="get" id="signin">sign in</a>
       </div>
       <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
     </form>
