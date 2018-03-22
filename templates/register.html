@@ -36,15 +36,15 @@
 
     <main role="main" class="text-center">
       <div class="container">
-        <form class="form-signup">
+        <form class="form-signup" action="{{ url_for('create_group') }}"  method="post">
           <h1 class="h3 mb-3 font-weight-normal">Create a Group</h1>
           <div class="form-group">
             <label for="groupName">Group Name</label>
-            <input type="email" class="form-control" id="groupName" required autofocus>
+            <input type="text" name="group"class="form-control" id="groupName" required autofocus>
           </div>
           <div class="form-group">
             <label for="input2ndPassword">Group Descriptions</label>
-            <textarea class="form-control" id="input2ndPassword" placeholder="Descriptions..." rows="3"></textarea>
+            <textarea type="text" name="description" class="form-control" id="input2ndPassword" placeholder="Descriptions..." rows="3"></textarea>
           </div>
           <button class="btn btn-lg btn-success btn-block" type="submit">Create</button>
         </form>

@@ -58,3 +58,8 @@ def signup():
 def create_group():
     if request.method == 'GET':
         return render_template('register.html')
+    elif request.method == 'POST':
+        #TODO: Connect to DB
+        print(request.form['group'])
+        print(request.form['description'])
+        return redirect(url_for('home'))
