@@ -223,7 +223,11 @@ def add_group():
 	error = None
 	if request.method == 'POST':
 		if request.form['group_name']:	
-			db.session.add(Group(session['user_id'], request.form['group_name'], request.form['description'], int(time.time()))) 
+			db.session.add(Group(session['user_id'], request.form['group_name'], request.form['description'], int(time.time())))			
+			db.session.commit()
+			un = User.query.filter_by(user_id=session['user_id']).first()
+			gp = Group.query.filter_by(group_name=request.form['group_name']).first()		
+			un.follows.append(gp)
 			db.session.commit()
 			flash('Group created!')
 			return redirect(url_for('user_groups'))
@@ -256,13 +260,13 @@ def add_list():
 
 	return redirect(url_for('in_group',group_name=gp.group_name))
 	
-@app.route("/new_task", methods=['GET', 'POST'])
-def add_task(list_id):
+@app.route("/new_task/<list_name>", methods=['GET', 'POST'])
+def add_task(list_name):
 	"""Add task to the list"""
 	if 'user_id' not in session:
 		return redirect(url_for('login'))	
 	u = User.query.filter_by(user_id=session['user_id']).first()
-	
+	list_id = get_list_id(list_name)
 	print('Checking status!')
 	
 	if u.enter is None:
@@ -284,15 +288,14 @@ def add_task(list_id):
 		for l in gp.lists:
 			list_ids.append(l.list_id)
 		
-		if request.form['text']:
+		if request.form['task_name']:
 			db.session.add(Task(u.username, list_ids[0], request.form['task_name'], request.form['description'],int(time.time())))
 			db.session.commit()
-			return redirect(url_for('in_group',group_name=gp.group_name))
-	
-	return render_template('index.html', error=error)
+		
+	return redirect(url_for('in_group',group_name=gp.group_name))
 
 	
-@app.route("/changeTask", methods=['GET', 'POST'])
+@app.route("/changeTask/<task_id>", methods=['GET', 'POST'])
 def change_task(task_id):
 	"""Change task status"""
 	if 'user_id' not in session:
@@ -319,7 +322,7 @@ def change_task(task_id):
 
 	return redirect(url_for('in_group',group_name=gp.group_name))
 	
-@app.route("/deleteTask", methods=['GET', 'POST'])
+@app.route("/deleteTask/<task_id>", methods=['GET', 'POST'])
 def delete_task(task_id):
 	"""delete the task"""
 	if 'user_id' not in session:
@@ -368,10 +371,10 @@ def add_member():
 		return redirect(url_for('groups_all'))
 			
 	if request.form['user']:
-		un = User.query.filter(or_(username=request.form['user'], email=request.form['user'])).first()
+		un = User.query.filter(or_(User.username==request.form['user'], User.email==request.form['user'])).first()
 		if un:
 			gp = Group.query.filter_by(group_id=u.enter).first()
-			un.follow.append(gp)
+			un.follows.append(gp)
 			db.session.commit()
 			flash('User Added Success!')
 		else:
@@ -381,7 +384,7 @@ def add_member():
 	return redirect(url_for('in_group',group_name=gp.group_name))
 
 	
-@app.route('/removeMember')
+@app.route('/removeMember/<username>')
 def remove_member(username):
 	"""remove a member from the group"""
 	if not g.user:
@@ -408,7 +411,7 @@ def remove_member(username):
 			
 	follower = User.query.filter_by(user_id=followee_id).first()
 	gp = Group.query.filter_by(group_id=u.enter).first()	
-	gp.follows.remove(follower)
+	gp.followers.remove(follower)
 	db.session.commit()
 		
 	return redirect(url_for('in_group',group_name=gp.group_name))	
@@ -491,3 +494,4 @@ print(__name__)
 if __name__ == "__main__":
 	app.run(debug = True)
 	app.run(threaded=True)
+
