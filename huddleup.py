@@ -154,7 +154,7 @@ def in_group(group_name):
 		
 	members = User.query.filter(User.user_id.in_(member_ids)).all()
 	
-	return render_template('index.html', lists=lists, tasks=tasks, members=members, group_name=group_name)
+	return render_template('index.html', lists=lists, tasks=tasks, members=members, group=gp)
 
 
 @app.route('/leave')
