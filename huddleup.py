@@ -68,10 +68,7 @@ def before_request():
 	g.user = None
 	if 'user_id' in session:
 		g.user = User.query.filter_by(user_id=session['user_id']).first()
-		if g.user.enter:
-			g.group = Group.query.filter_by(group_id=g.user.enter).first()
-			
-			
+						
 @app.route('/groups')
 def groups_all():
 	"""Display all groups"""
@@ -251,11 +248,13 @@ def add_list():
 		
 	print('Adding list!')	
 	
+	gp = Group.query.filter_by(group_id=u.enter).first()
+	
 	if request.form['title']:
 		db.session.add(List(u.enter, request.form['title'], int(time.time())))
 		db.session.commit()
 
-	return redirect(url_for('in_group',group_name=g.group.group_name))
+	return redirect(url_for('in_group',group_name=gp.group_name))
 	
 @app.route("/new_task", methods=['GET', 'POST'])
 def add_task(list_id):
@@ -363,7 +362,6 @@ def add_member():
 		else:
 			flash('Warning: Group does not found')
 			u.enter = None
-			g.group = None
 			return redirect(url_for('groups_all'))
 	else:
 		flash('Warning: You are not in any group')
@@ -378,8 +376,9 @@ def add_member():
 			flash('User Added Success!')
 		else:
 			flash('Failed. Could not find the user with credential')
+	gp = Group.query.filter_by(group_id=u.enter).first()
 		
-	return redirect(url_for('in_group',group_name=g.group.group_name))
+	return redirect(url_for('in_group',group_name=gp.group_name))
 
 	
 @app.route('/removeMember')
@@ -402,17 +401,17 @@ def remove_member(username):
 		else:
 			flash('Warning: Group does not found')
 			u.enter = None
-			g.group = None
 			return redirect(url_for('groups_all'))
 	else:
 		flash('Warning: You are not in any group')
 		return redirect(url_for('groups_all'))
 			
-	follower = User.query.filter_by(user_id=followee_id).first()	
-	Group.query.filter_by(group_id=g.group.group_id).first().follows.remove(follower)
+	follower = User.query.filter_by(user_id=followee_id).first()
+	gp = Group.query.filter_by(group_id=u.enter).first()	
+	gp.follows.remove(follower)
 	db.session.commit()
 		
-	return redirect(url_for('in_group',group_name=g.group.group_name))	
+	return redirect(url_for('in_group',group_name=gp.group_name))	
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -492,4 +491,3 @@ print(__name__)
 if __name__ == "__main__":
 	app.run(debug = True)
 	app.run(threaded=True)
-
