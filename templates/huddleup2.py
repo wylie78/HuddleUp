@@ -12,7 +12,6 @@ from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug import check_password_hash, generate_password_hash
 from sqlalchemy import and_, or_
 
-
 from models import db, User, Group, List, Task
 
 # create our little application :)
@@ -69,7 +68,10 @@ def before_request():
 	g.user = None
 	if 'user_id' in session:
 		g.user = User.query.filter_by(user_id=session['user_id']).first()
-
+		if g.user.enter:
+			g.group = Group.query.filter_by(group_id=g.user.enter).first()
+			
+			
 @app.route('/groups')
 def groups_all():
 	"""Display all groups"""
@@ -92,7 +94,7 @@ def groups_all():
 	for gp in u.follows:
 		group_ids.append(gp.group_id)
 		
-	groups = Group.query.filter(Group.group_id.in_(group_ids)).order_by(group.date).all()
+	groups = Group.query.filter(Group.group_id.in_(group_ids)).order_by(Group.date).all()
 	if groups:
 		session['last_group'] = groups[-1].date
 	else:
@@ -121,7 +123,6 @@ def in_group(group_name):
 	"""Check if the current user is in another group."""
 	if u.enter is None: 
 		u.enter = gp.group_id
-		g.group = gp
 		db.session.commit()
 		flash('Welcome to group "%s".' % group_name)
 	elif u.enter != gp.group_id:
@@ -140,7 +141,9 @@ def in_group(group_name):
 		session['last_list'] = 0
 	
 	# --------------Assume only 1 list for now
-	temp_first_list = List.query.filter_by(list_id=list_ids[0]).first()
+	temp_first_list = None
+	for l in gp.lists:
+		temp_first_list = l
 	task_ids = []
 	if temp_first_list:
 		for t in temp_first_list.tasks:
@@ -149,7 +152,7 @@ def in_group(group_name):
 	tasks = Task.query.filter(Task.task_id.in_(task_ids)).all()	
 		
 	member_ids = []
-	for m in gp.follows:
+	for m in gp.followers:
 		member_ids.append(m.user_id)
 		
 	members = User.query.filter(User.user_id.in_(member_ids)).all()
@@ -166,10 +169,9 @@ def leave_group():
 	if u.enter:
 		gp = Group.query.filter_by(group_id=u.enter).first()
 		u.enter = None
-		g.group = None
 		db.session.commit()
 	else:
-		flash('Error: You are not in any room.')
+		flash('Error: You are not in any group.')
 	
 	return redirect(url_for('groups_all'))
 	
@@ -215,20 +217,23 @@ def delete_group(group_name):
 	return redirect(url_for('user_groups'))
 
 
-@app.route('/add_group', methods=['POST'])
+@app.route('/add_group', methods=['GET', 'POST'])
 def add_group():
 	"""Creates a new group for the user."""
 	if not g.user:
-		abort(401)
-	if request.form['group_name']:	
-		db.session.add(Group(session['user_id'], request.form['group_name'], request.form['description'], int(time.time()))) 
-		db.session.commit()
-		flash('Group created!')
-		return redirect(url_for('user_groups'))
+		return redirect(url_for('login'))
+		
+	error = None
+	if request.method == 'POST':
+		if request.form['group_name']:	
+			db.session.add(Group(session['user_id'], request.form['group_name'], request.form['description'], int(time.time()))) 
+			db.session.commit()
+			flash('Group created!')
+			return redirect(url_for('user_groups'))
 	
-	return render_template('index.html', error=error)
+	return render_template('index.html',error = error)
 	
-@app.route("/new_list", methods=["POST"])
+@app.route("/new_list", methods=['GET', 'POST'])
 def add_list():
 	"""Add list to the group"""
 	if 'user_id' not in session:
@@ -247,12 +252,12 @@ def add_list():
 	print('Adding list!')	
 	
 	if request.form['title']:
-		db.session.add(List(u.username, u.enter, request.form['title'], int(time.time())))
+		db.session.add(List(u.enter, request.form['title'], int(time.time())))
 		db.session.commit()
 
 	return redirect(url_for('in_group',group_name=g.group.group_name))
 	
-@app.route("/new_task", methods=["POST"])
+@app.route("/new_task", methods=['GET', 'POST'])
 def add_task(list_id):
 	"""Add task to the list"""
 	if 'user_id' not in session:
@@ -270,22 +275,25 @@ def add_task(list_id):
 		
 	print('Adding task!')	
 	
-	gp = Group.query.filter_by(group_id=u.enter).first()
-
-	# -----------------Assume there's only 1 list for each group
-	list_ids = []	
-	for l in gp.lists:
-		list_ids.append(l.list_id)
+	error = None
+	if request.method == 'POST':
 	
-	if request.form['text']:
-		db.session.add(Task(u.username, list_ids[0], request.form['task_name'], request.form['description'],int(time.time())))
-		db.session.commit()
-		return redirect(url_for('in_group',group_name=gp.group_name))
+		gp = Group.query.filter_by(group_id=u.enter).first()
+
+		# -----------------Assume there's only 1 list for each group
+		list_ids = []	
+		for l in gp.lists:
+			list_ids.append(l.list_id)
+		
+		if request.form['text']:
+			db.session.add(Task(u.username, list_ids[0], request.form['task_name'], request.form['description'],int(time.time())))
+			db.session.commit()
+			return redirect(url_for('in_group',group_name=gp.group_name))
 	
 	return render_template('index.html', error=error)
 
 	
-@app.route("/changeTask", methods=["POST"])
+@app.route("/changeTask", methods=['GET', 'POST'])
 def change_task(task_id):
 	"""Change task status"""
 	if 'user_id' not in session:
@@ -312,7 +320,7 @@ def change_task(task_id):
 
 	return redirect(url_for('in_group',group_name=gp.group_name))
 	
-@app.route("/deleteTask", methods=["POST"])
+@app.route("/deleteTask", methods=['GET', 'POST'])
 def delete_task(task_id):
 	"""delete the task"""
 	if 'user_id' not in session:
@@ -337,7 +345,7 @@ def delete_task(task_id):
 
 	return redirect(url_for('in_group',group_name=gp.group_name))
 
-@app.route('/addMember', methods=["POST"])
+@app.route('/addMember', methods=['GET', 'POST'])
 def add_member():
 	"""Display search page"""
 	if not g.user:
@@ -423,7 +431,7 @@ def login():
 		else:
 			flash('You were logged in')
 			session['user_id'] = user.user_id
-			return redirect(url_for('rooms_all'))
+			return redirect(url_for('groups_all'))
 			
 	return render_template('login.html', error=error)
 
@@ -434,7 +442,7 @@ def register():
 	
 	if g.user:
 		flash('Please log out first')
-		return redirect(url_for('rooms_all'))
+		return redirect(url_for('groups_all'))
 
 	error = None
 	if request.method == 'POST':
