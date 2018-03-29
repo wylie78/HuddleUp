@@ -35,7 +35,7 @@
 
          flask initdb
 
-      7. now you can run minitwit:
+      7. now you can run HuddleUp:
 
          flask run
 
