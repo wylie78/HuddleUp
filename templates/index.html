@@ -100,8 +100,8 @@
 					{% for task in tasks %}
 						<div class="card text-center">
 						  <div class="card-body">
-							<h5 class="card-title">task.title</h5>
-							<p class="card-text">task.description</p>
+							<h5 class="card-title">{{ task.title }}</h5>
+							<p class="card-text">{{ task.description }}</p>
 							<div class="btn-group">
 							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Change State
