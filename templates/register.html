@@ -14,85 +14,23 @@
     <link href="../static/signup.css" rel="stylesheet">
   </head>
   
-  <body>
-
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-success">
-      <a class="navbar-brand" href="{{ url_for('home') }}" method="get">HuddleUp</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home') }}" method="get">My Groups<span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
+  <body class="text-center">
+    <form class="form-signup" action="{{ url_for('register') }}"  method="post">
+      <h1 class="h3 mb-3 font-weight-normal">Register for HuddleUp</h1>
+      <label for="inputLast" class="sr-only">Username</label>
+      <input type="text" name="username" id="inputLast" class="form-control" placeholder="Username" required autofocus>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <label for="input2ndPassword" class="sr-only">Repeat Password</label>
+      <input type="password" name="password2" id="input2ndPassword" class="form-control" placeholder="Repeat Password" required>
+      <div class="signin">
+      	"or "
+      	<a href="{{ url_for('login') }}" id="signin">sign in</a>
       </div>
-    </nav>
-
-    <main role="main" class="text-center">
-		<div class="row">
-		   <div class="col-auto">
-			<div class="card text-center">
-			  <div class="card-header">
-				Featured
-			  </div>
-			  <div class="card text-center">
-				  <div class="card-body">
-					<h5 class="card-title">Special title treatment</h5>
-					<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-					<a href="#" class="btn btn-primary">Go somewhere</a>
-				  </div>
-			  </div>
-			  <div class="card text-center">
-				  <div class="card-body">
-					<h5 class="card-title">Special title treatment</h5>
-					<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-					<div class="btn-group">
-					  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Change State
-					  </button>
-					  <form action="{{ url_for('change_task') }}" method="post">
-						  <div class="dropdown-menu">
-							<a class="dropdown-item" name="state" type="submit">Incomplete</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" name="state" type="submit">In Progress</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" name="state" type="submit">Complete</a>
-						  </div>
-					  </form>
-					</div>
-				  </div>
-			  </div>
-			  <div class="card-footer">
-					<a href="#" class="text-muted">Add task</a>
-			  </div>
-			</div>
-			</div>
-			
-		  <div class="col-auto">
-			<form class="form-inline">
-			  <div class="form-group mx-sm-3 mb-2">
-				<label for="addList2" class="sr-only">Add List</label>
-				<input type="text" class="form-control" name="title" id="addList2" placeholder="List name">
-			  </div>
-			  <button type="submit" class="btn btn-primary mb-2">Add List</button>
-			</form>
-		  </div>
-		  
-		  <div class="col-auto">
-			<ul class="list-group">
-			  <li class="list-group-item d-flex justify-content-between align-items-center">
-				<h5>Members</h5>
-			  </li>
-			  <li class="list-group-item d-flex justify-content-between align-items-center">
-				Cras justo odio
-				<a class="unfollow" href="{{ url_for('unfollow_user', username=profile_user.username) }}">remove</a>
-			  </li>
-			</ul>
-		  </div>			
-		</div>
-    </main>
+      <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
+    </form>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

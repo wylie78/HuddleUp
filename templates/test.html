@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	  <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	  <!-- Custom styles for this template -->
+    <link href="../static/signup.css" rel="stylesheet">
+  </head>
+  
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-success">
+      <a class="navbar-brand" href="{{ url_for('home') }}" method="get">HuddleUp</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home') }}" method="get">My Groups<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="text-center">
+		<div class="row">
+		   <div class="col-auto">
+			<div class="card text-center">
+			  <div class="card-header">
+				Featured
+			  </div>
+			  <div class="card text-center">
+				  <div class="card-body">
+					<h5 class="card-title">Special title treatment</h5>
+					<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					<a href="#" class="btn btn-primary">Go somewhere</a>
+				  </div>
+			  </div>
+			  <div class="card text-center">
+				  <div class="card-body">
+					<h5 class="card-title">Special title treatment</h5>
+					<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+					<div class="btn-group">
+					  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Change State
+					  </button>
+					  <form action="{{ url_for('change_task') }}" method="post">
+						  <div class="dropdown-menu">
+							<a class="dropdown-item" name="state" type="submit">Incomplete</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" name="state" type="submit">In Progress</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" name="state" type="submit">Complete</a>
+						  </div>
+					  </form>
+					</div>
+				  </div>
+			  </div>
+			  <div class="card-footer">
+					<a href="#" class="text-muted">Add task</a>
+			  </div>
+			</div>
+			</div>
+			
+		  <div class="col-auto">
+			<form class="form-inline">
+			  <div class="form-group mx-sm-3 mb-2">
+				<label for="addList2" class="sr-only">Add List</label>
+				<input type="text" class="form-control" name="title" id="addList2" placeholder="List name">
+			  </div>
+			  <button type="submit" class="btn btn-primary mb-2">Add List</button>
+			</form>
+		  </div>
+		  
+		  <div class="col-auto">
+			<ul class="list-group">
+			  <li class="list-group-item d-flex justify-content-between align-items-center">
+				<h5>Members</h5>
+			  </li>
+			  <li class="list-group-item d-flex justify-content-between align-items-center">
+				Cras justo odio
+				<a class="unfollow" href="{{ url_for('unfollow_user', username=profile_user.username) }}">remove</a>
+			  </li>
+			</ul>
+		  </div>			
+		</div>
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

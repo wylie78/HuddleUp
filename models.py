@@ -22,7 +22,7 @@ class User(db.Model):
 	enter = db.Column(db.Integer)
 	
 	# Groups the user hosts
-	hosts = db.relationship('Room', backref='host')
+	hosts = db.relationship('Group', backref='host')
 	# Groups the user follows
 	follows = db.relationship('Group', secondary='follows', backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 	

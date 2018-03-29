@@ -17,25 +17,33 @@
 
   <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-success">
-      <a class="navbar-brand" href="{{ url_for('home') }}" method="get">HuddleUp</a>
+      <a class="navbar-brand" href="{{ url_for('leave_group') }}" method="get">HuddleUp</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
 			{% if request.endpoint == 'in_group' %}
-				<a class="nav-link" href="{{ url_for('leave_group') }}">all groups</a> 				
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('leave_group') }}">all groups</a> 
+			</li>
 			{% elif request.endpoint == 'user_groups' %}
+			<li class="nav-item">
 				<a class="nav-link" href="{{ url_for('groups_all') }}">all groups</a>
-				<a class="nav-link" href="{{ url_for('add_group') }}" method="post">Create Group<span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('add_group') }}">Create Group</a>
+			</li>
 			{% else %}
+			<li class="nav-item">
 				<a class="nav-link" href="{{ url_for('user_groups') }}">my groups</a> 
+			</li>
 			{% endif %}
-			<a class="nav-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a>
-          </li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a>
+			</li>
         </ul>
-		{% if request.endpoint == 'in_group' and g.group.host_id == user.user_id %}
+		{% if request.endpoint == 'in_group' %}
 		<form class="form-inline mt-2 mt-md-0" action="{{ url_for('add_member') }}" method="post">
           <input class="form-control mr-sm-2" type="text" name="user" placeholder="Username or Email" aria-label="Search">
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Add Member</button>
@@ -44,7 +52,7 @@
       </div>
     </nav>
 
-    <main role="main" class="container">
+    <main role="main" class="text-center">
 		{% if request.endpoint == 'add_group' %}
 			<div class="text-center">
 				<form class="form-signup" action="{{ url_for('add_group') }}"  method="post">
@@ -81,8 +89,8 @@
               <div class="card mb-4 box-shadow">
                 <div class="card-body">
                   <h5 class="card-title">group.group_name</h5>
-                  <p class="card-text">There are some descriptions about this group here.</p>
-                  <a href="#" class="btn btn-outline-success">Enter</a>
+                  <p class="card-text">group.description</p>
+                  <a href="{{ url_for('in_group',group_name=group.group_name) }}" class="btn btn-outline-success">Enter</a>
                 </div>
               </div>
             </div>
@@ -100,8 +108,8 @@
 					{% for task in tasks %}
 						<div class="card text-center">
 						  <div class="card-body">
-							<h5 class="card-title">{{ task.title }}</h5>
-							<p class="card-text">{{ task.description }}</p>
+							<h5 class="card-title">task.title</h5>
+							<p class="card-text">task.description</p>
 							<div class="btn-group">
 							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Change State
