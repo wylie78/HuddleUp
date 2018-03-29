@@ -53,6 +53,10 @@
     </nav>
 
     <main role="main" class="text-center">
+		<div class="starter-template">
+        <h1>Welcome to HuddleUp</h1>
+        <p class="lead"></p>
+		</div>
 		{% if request.endpoint == 'add_group' %}
 			<div class="text-center">
 				<form class="form-signup" action="{{ url_for('add_group') }}"  method="post">
