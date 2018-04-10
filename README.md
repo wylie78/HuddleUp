@@ -21,7 +21,7 @@
 	  
 		 python -m pip install -r requirement.txt
 
-      4. edit the configuration in the huddleup.py file or
+      4. (Optional)edit the configuration in the huddleup.py file or
          export an HUDDLEUP_SETTINGS environment variable
          pointing to a configuration file.
 

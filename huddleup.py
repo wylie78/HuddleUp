@@ -137,24 +137,31 @@ def in_group(group_name):
 	else:
 		session['last_list'] = 0
 	
-	# --------------Assume only 1 list for now
-	temp_first_list = None
+	# Get list items	
+	list_ids = []
 	for l in gp.lists:
-		temp_first_list = l
-	task_ids = []
-	if temp_first_list:
-		for t in temp_first_list.tasks:
-			task_ids.append(t.task_id)
+		list_ids.append(l.list_id)
 		
-	tasks = Task.query.filter(Task.task_id.in_(task_ids)).all()	
+	lists = List.query.filter(List.list_id.in_(list_ids)).all()
+	
+	# Get task items
+	tasks_all = []
+	if lists:
+		for l in lists:
+			task_ids = []
+			for t in l.tasks:
+				task_ids.append(t.task_id)
+			tasks = Task.query.filter(Task.task_id.in_(task_ids)).all()
+			tasks_all.append(tasks)
 		
+	# Get members	
 	member_ids = []
 	for m in gp.followers:
 		member_ids.append(m.user_id)
 		
 	members = User.query.filter(User.user_id.in_(member_ids)).all()
 	
-	return render_template('index.html', lists=lists, tasks=tasks, members=members, group=gp)
+	return render_template('index.html', lists=lists, tasks=tasks_all, members=members, group=gp )
 
 
 @app.route('/leave')
@@ -266,7 +273,12 @@ def add_task(list_name):
 	if 'user_id' not in session:
 		return redirect(url_for('login'))	
 	u = User.query.filter_by(user_id=session['user_id']).first()
+	gp = Group.query.filter_by(group_id=u.enter).first()
 	list_id = get_list_id(list_name)
+	if list_id is None:
+		flash('Error: list not found.')
+		return redirect(url_for('in_group',group_name=gp.group_name))
+		
 	print('Checking status!')
 	
 	if u.enter is None:
@@ -279,17 +291,9 @@ def add_task(list_name):
 	print('Adding task!')	
 	
 	error = None
-	if request.method == 'POST':
-	
-		gp = Group.query.filter_by(group_id=u.enter).first()
-
-		# -----------------Assume there's only 1 list for each group
-		list_ids = []	
-		for l in gp.lists:
-			list_ids.append(l.list_id)
-		
+	if request.method == 'POST':		
 		if request.form['task_name']:
-			db.session.add(Task(u.username, list_ids[0], request.form['task_name'], request.form['description'],int(time.time())))
+			db.session.add(Task(u.username, list_id, request.form['task_name'], request.form['description'],int(time.time())))
 			db.session.commit()
 		
 	return redirect(url_for('in_group',group_name=gp.group_name))
@@ -319,6 +323,7 @@ def change_task(task_id):
 		t = Task.query.filter_by(task_id=task_id).first()
 		t.state = request.form['state']
 		db.session.commit()
+		print('State changed to:' + request.form['state'])	
 
 	return redirect(url_for('in_group',group_name=gp.group_name))
 	
@@ -400,6 +405,9 @@ def remove_member(username):
 		if pregroup:
 			if pregroup.host_id != u.user_id:
 				flash('Warning: You do not have the authority for this page')
+				return redirect(url_for('in_group',group_name=pregroup.group_name))
+			if pregroup.host_id == followee_id:
+				flash('Warning: You cannot remove host of the group')
 				return redirect(url_for('in_group',group_name=pregroup.group_name))
 		else:
 			flash('Warning: Group does not found')
