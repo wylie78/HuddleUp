@@ -3,41 +3,41 @@
 
 ## What is HuddleUp?
 
-      A SQLite and Flask powered check list app
+A SQLite and Flask powered check list app
 	  
 ## Author:
 	
-	  Team 8
+Team 8
 	  
 
 ## How do I use it?
 	
-	  1. Install python 3.6.5 or above on your computer.
-	  
-	  2. Change to the root directory of HuddleUp app
-	  
-	  3. Run the following command to install all dependencies with pip
-	  
-		 python -m pip install -r requirement.txt
+1. Install python 3.6.5 or above on your computer.
 
-      4. (Optional)edit the configuration in the huddleup.py file or
-         export an HUDDLEUP_SETTINGS environment variable
-         pointing to a configuration file.
+2. Change to the root directory of HuddleUp app
 
-      5. tell flask about the right application:
+3. Run the following command to install all dependencies with pip
 
-         export FLASK_APP=huddleup.py
-		 
-		 (For windows user, use set command instead)
+ python -m pip install -r requirement.txt
 
-      6. fire up a shell and run this:
+4. (Optional)edit the configuration in the huddleup.py file or
+ export an HUDDLEUP_SETTINGS environment variable
+ pointing to a configuration file.
 
-         flask initdb
+5. tell flask about the right application:
 
-      7. now you can run HuddleUp:
+ export FLASK_APP=huddleup.py
+ 
+ (For windows user, use set command instead)
 
-         flask run
+6. fire up a shell and run this:
 
-         the application will greet you on
-         http://localhost:5000/
+ flask initdb
+
+7. now you can run HuddleUp:
+
+ flask run
+
+ the application will greet you on
+ http://localhost:5000/
 
