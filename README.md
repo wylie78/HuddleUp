@@ -3,11 +3,11 @@
 
 ## What is HuddleUp?
 
-A SQLite and Flask powered check list app
+* A SQLite and Flask powered check list app
 	  
 ## Author:
 	
-Team 8
+* Team 8
 	  
 
 ## How do I use it?
