@@ -18,26 +18,24 @@ Team 8
 
 3. Run the following command to install all dependencies with pip
 
- python -m pip install -r requirement.txt
+`python -m pip install -r requirement.txt`
 
-4. (Optional)edit the configuration in the huddleup.py file or
- export an HUDDLEUP_SETTINGS environment variable
- pointing to a configuration file.
+4. (Optional)edit the configuration in the huddleup.py file or export a HUDDLEUP_SETTINGS environment variable pointing to a configuration file.
 
 5. tell flask about the right application:
 
- export FLASK_APP=huddleup.py
+`export FLASK_APP=huddleup.py`
  
  (For windows user, use set command instead)
 
 6. fire up a shell and run this:
 
- flask initdb
+`flask initdb`
 
 7. now you can run HuddleUp:
 
- flask run
+`flask run`
 
- the application will greet you on
- http://localhost:5000/
+8. the application will greet you on
+`http://localhost:5000/`
 
