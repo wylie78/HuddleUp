@@ -1,17 +1,16 @@
 
-                        / HuddleUp /
+# HuddleUp
 
-
-    ~ What is HuddleUp?
+## What is HuddleUp?
 
       A SQLite and Flask powered check list app
 	  
-	~ Author:
+## Author:
 	
 	  Team 8
 	  
 
-    ~ How do I use it?
+## How do I use it?
 	
 	  1. Install python 3.6.5 or above on your computer.
 	  
