@@ -55,7 +55,7 @@ def get_group_id(group_name):
 	
 def get_list_id(list_name):
 	"""Convenience method to look up the id for a list name."""
-	rv = List.query.filter_by(list_name=list_name).first()
+	rv = List.query.filter(and_(List.list_name==list_name, List.group_id==g.user.enter)).first()
 	return rv.list_id if rv else None
 	
 def format_datetime(timestamp):
@@ -262,8 +262,13 @@ def add_list():
 	gp = Group.query.filter_by(group_id=u.enter).first()
 	
 	if request.form['title']:
-		db.session.add(List(u.enter, request.form['title'], int(time.time())))
-		db.session.commit()
+		# Prevent adding lists of the same name
+		l = get_list_id(request.form['title'])
+		if l is None:
+			db.session.add(List(u.enter, request.form['title'], int(time.time())))
+			db.session.commit()
+		else:
+			flash('The list name is in use!')
 
 	return redirect(url_for('in_group',group_name=gp.group_name))
 	
