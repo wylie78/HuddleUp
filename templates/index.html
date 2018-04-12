@@ -106,6 +106,9 @@
 							<h5 class="card-title">{{ task.title }}</h5>
 							<p class="text-secondary">{{ task.state }}</p>
 							<p class="card-text">{{ task.description }}</p>
+							<div class="form-group">
+								<a class="unfollow" href="{{ url_for('delete_task', task_id=task.task_id) }}">remove</a>
+							</div>
 							<div class="btn-group">
 							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Change State
