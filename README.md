@@ -22,19 +22,19 @@ Team 8
 
 4. (Optional) Edit the configuration in the huddleup.py file or export a HUDDLEUP_SETTINGS environment variable pointing to a configuration file.
 
-5. tell flask about the right application:
+5. Tell flask about the right application:
 
 	`export FLASK_APP=huddleup.py`
  
-	(For windows user, use set command instead)
+	(For windows user, use `set` command instead)
 
-6. fire up a shell and run this:
+6. Fire up a shell and run this:
 
 	`flask initdb`
 
-7. now you can run HuddleUp:
+7. Now you can run HuddleUp:
 
 	`flask run`
 
-8. the application will greet you at http://localhost:5000/
+8. The application will greet you at http://localhost:5000/
 
