@@ -20,7 +20,7 @@ Team 8
 
 	`python -m pip install -r requirement.txt`
 
-4. (Optional)edit the configuration in the huddleup.py file or export a HUDDLEUP_SETTINGS environment variable pointing to a configuration file.
+4. (Optional) Edit the configuration in the huddleup.py file or export a HUDDLEUP_SETTINGS environment variable pointing to a configuration file.
 
 5. tell flask about the right application:
 
@@ -36,5 +36,5 @@ Team 8
 
 	`flask run`
 
-8. the application will greet you at `http://localhost:5000/`
+8. the application will greet you at http://localhost:5000/
 
