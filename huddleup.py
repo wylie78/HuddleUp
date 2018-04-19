@@ -40,6 +40,8 @@ def initdb_command():
 	"""Initialize the database tables."""
 	db.drop_all()
 	db.create_all()
+	db.session.add(User('admin', 'admin@admin.com', generate_password_hash('admin')))
+	db.session.commit()
 	print('Initialized the database.')
 
 	
@@ -68,6 +70,94 @@ def before_request():
 	g.user = None
 	if 'user_id' in session:
 		g.user = User.query.filter_by(user_id=session['user_id']).first()
+
+@app.route('/admin_u')
+def admin_users():
+	"""Display all users information"""
+	if not g.user:
+		return redirect(url_for('login'))
+	
+	u = User.query.filter_by(user_id=session['user_id']).first()
+	
+	# Check if use is the admin
+	if u.username != "admin":
+		abort(404)
+	
+	# Get all users
+	users = User.query.all()
+
+	return render_template('index.html', users=users)
+	
+	
+@app.route('/admin_g')
+def admin_groups():
+	"""Display all groups information"""
+	if not g.user:
+		return redirect(url_for('login'))
+	
+	u = User.query.filter_by(user_id=session['user_id']).first()
+	
+	# Check if use is the admin
+	if u.username != "admin":
+		abort(404)
+	
+	# Get all users
+	groups = Group.query.all()
+
+	return render_template('index.html', groups=groups)
+
+
+@app.route('/admin/removeUser/<username>')
+def remove_user(username):
+	"""remove a user from database"""
+	if not g.user:
+		return redirect(url_for('login'))
+		
+	u = User.query.filter_by(user_id=session['user_id']).first()	
+	# Check if use is the admin
+	if u.username != "admin":
+		abort(404)
+	
+	# Prevent from removing admin
+	if username == "admin":
+		flash('Unable to remove admin')
+		return redirect(url_for('admin_users'))	
+		
+	remove_id = get_user_id(username)
+	u_remove = User.query.filter_by(user_id=remove_id).first()
+	
+	if u_remove:
+		gs = Group.query.filter_by(host_id=u_remove.user_id).order_by(Group.date.desc()).all()
+		# Remove groups the user created
+		for group in gs:
+			db.session.delete(group)
+			db.session.commit()		
+		db.session.delete(u_remove)
+		db.session.commit()
+		
+	return redirect(url_for('admin_users'))	
+
+
+@app.route('/admin/removeGroup/<group_name>')
+def remove_group(group_name):
+	"""remove a group from database"""
+	if not g.user:
+		return redirect(url_for('login'))
+		
+	u = User.query.filter_by(user_id=session['user_id']).first()	
+	# Check if use is the admin
+	if u.username != "admin":
+		abort(404)
+		
+	remove_id = get_group_id(group_name)
+	g_remove = Group.query.filter_by(group_id=remove_id).first()
+	
+	if g_remove:
+		db.session.delete(g_remove)
+		db.session.commit()
+		
+	return redirect(url_for('admin_groups'))		
+	
 						
 @app.route('/groups')
 def groups_all():
@@ -230,6 +320,9 @@ def add_group():
 	error = None
 	if request.method == 'POST':
 		if request.form['group_name']:	
+			if Group.query.filter_by(group_name=request.form['group_name']).first():
+				flash('Failed: Group name exists, please use another name.')
+				return redirect(url_for('add_group'))
 			db.session.add(Group(session['user_id'], request.form['group_name'], request.form['description'], int(time.time())))			
 			db.session.commit()
 			un = User.query.filter_by(user_id=session['user_id']).first()
@@ -429,10 +522,13 @@ def remove_member(username):
 		
 	return redirect(url_for('in_group',group_name=gp.group_name))	
 
+	
 @app.route('/', methods=['GET', 'POST'])
 def login():
 	"""Logs the user in."""
 	if g.user:
+		if g.user.username == 'admin':
+			return redirect(url_for('admin_groups'))
 		return redirect(url_for('groups_all'))
 			
 	error = None
@@ -440,12 +536,14 @@ def login():
 
 		user = User.query.filter_by(email=request.form['email']).first()
 		if user is None:
-			error = 'Invalid email'
+			flash('Invalid email')
 		elif not check_password_hash(user.pw_hash, request.form['password']):
-			error = 'Invalid password'
+			flash('Invalid password')
 		else:
 			flash('You were logged in')
 			session['user_id'] = user.user_id
+			if user.username == 'admin':
+				return redirect(url_for('admin_groups'))
 			return redirect(url_for('groups_all'))
 			
 	return render_template('login.html', error=error)
@@ -453,8 +551,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	"""Registers the user."""
-	
+	"""Registers the user."""	
 	if g.user:
 		flash('Please log out first')
 		return redirect(url_for('groups_all'))

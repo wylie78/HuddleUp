@@ -27,6 +27,14 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{{ url_for('leave_group') }}">all groups</a> 
 			</li>
+			{% elif request.endpoint == 'admin_users' %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('admin_groups') }}">all groups</a> 
+			</li>
+			{% elif request.endpoint == 'admin_groups' %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url_for('admin_users') }}">all users</a> 
+			</li>
 			{% elif request.endpoint == 'user_groups' %}
 			<li class="nav-item">
 				<a class="nav-link" href="{{ url_for('groups_all') }}">all groups</a>
@@ -78,6 +86,52 @@
 			  </div>
 			  <button class="btn btn-lg btn-success btn-block" type="submit">Create</button>
 			</form>
+		{% elif request.endpoint == 'admin_users' %}
+			<table class="table">
+			  <thead>
+				<tr>
+				  <th scope="col">#</th>
+				  <th scope="col">Username</th>
+				  <th scope="col">Email</th>
+				  <th scope="col">control</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				{% for user in users %}
+				<tr>
+				  <th scope="row">{{ loop.index }}</th>
+				  <td>{{ user.username }}</td>
+				  <td>{{ user.email }}</td>
+				  <td><a class="unfollow" href="{{ url_for('remove_user', username=user.username) }}">remove</a></td>
+				</tr>
+				{% else %}
+					<li><em>There's no user so far.</em>
+				{% endfor %}
+			  </tbody>
+			</table>
+		{% elif request.endpoint == 'admin_groups' %}
+			<table class="table">
+			  <thead>
+				<tr>
+				  <th scope="col">#</th>
+				  <th scope="col">Group Name</th>
+				  <th scope="col">Descriptions</th>
+				  <th scope="col">control</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				{% for group in groups %}
+				<tr>
+				  <th scope="row">{{ loop.index }}</th>
+				  <td>{{ group.group_name }}</td>
+				  <td>{{ group.description }}</td>
+				  <td><a class="unfollow" href="{{ url_for('remove_group', group_name=group.group_name) }}">remove</a></td>
+				</tr>
+				{% else %}
+					<li><em>There's no group so far.</em>
+				{% endfor %}
+			  </tbody>
+			</table>
 		{% elif request.endpoint == 'groups_all' or request.endpoint == 'user_groups'%}
 			{% for group in groups %}
 			<div class="col-md-4">
